@@ -1,13 +1,15 @@
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
+gem 'bootstrap-sass', '2.1'
+
 
 # Bundle edge Rails instead:
 # gem 'rails', :git => 'git://github.com/rails/rails.git'
 
 group :development, :test do
-	gem 'sqlite3', '1.3.5'
-	gem 'rspec-rails', '2.11.0'
+    gem 'sqlite3', '1.3.5'
+    gem 'rspec-rails', '2.11.0'
 end
 
 # Gems used only for assets and not required
@@ -22,13 +24,14 @@ gem 'jquery-rails', '2.0.2'
 
 # Capybara gem allows us to simulate a user's interation with 
 # the sample application using a natural English-like syntax
-group :test do
-	gem 'capybara', '1.1.2'
+
+# Include postgreSQL
+group :production do
+    gem 'pg', '0.12.2'
 end
 
-# Include PostgreSQL gem in production for development to Heroku
-group :production do
-	gem 'pg', '0.12.2'
+group :test do
+    gem 'capybara', '1.1.2'
 end
 
 # To use ActiveModel has_secure_password
