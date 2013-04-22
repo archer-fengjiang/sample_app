@@ -1,5 +1,8 @@
 SampleApp::Application.routes.draw do
-  get "users/new"
+  #get "users/new"
+  #endows sample application with all the actions needed for a RESTful User resource
+  #correspondence of URIs, actions, and named routes is shown in Table 7.1
+  resources :users
 
   # maps requests for URI/static_pages/home to the home action
   # in the Staticpages controller

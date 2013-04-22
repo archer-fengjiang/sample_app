@@ -11,8 +11,13 @@
 <body>
   <%= render 'layouts/header' %>
   <div class="container">
+    <!--Adding contents of flash variable to the site layout-->
+    <% flash.each do |dey, value| %>
+      <div class="alert alert-<%= key %>"><%= value %></div>
+    <% end %>
     <%= yield %>
     <%= render 'layouts/footer' %>
+    <%= debug(params) if Rails.env.development? %>
   </div>
 </body>
 </html>
