@@ -1,17 +1,23 @@
 SampleApp::Application.routes.draw do
   #get "users/new"
-  #endows sample application with all the actions needed for a RESTful User resource
-  #correspondence of URIs, actions, and named routes is shown in Table 7.1
+
+  # endows sample application with all the actions needed for a RESTful User resource
+  # correspondence of URIs, actions, and named routes is shown in Table 7.1
   resources :users
+
+  # Adding a resource to get the standard RESTFul actions for sessions
+  resources :sessions, only: [:new, :create, :destroy]
 
   # maps requests for URI/static_pages/home to the home action
   # in the Staticpages controller
-  root :to => 'static_pages#home' #rount default link
-  match '/signup',  :to => 'users#new' #gives us the named route signup_path
-  match '/root',    :to => 'static_pages#home'
-  match '/help',    :to => 'static_pages#help'
-  match '/about',   :to => 'static_pages#about'
-  match '/contact', :to => 'static_pages#contact'
+  root to: 'static_pages#home' #rount default link
+  match '/signup',  to: 'users#new' #gives us the named route signup_path
+  match '/signin',  to: 'sessions#new'
+  match '/signout', to: 'sessions#destroy', via: :delete # :delete indicates that it should be invoked using an HTTP Delete request
+  match '/root',    to: 'static_pages#home'
+  match '/help',    to: 'static_pages#help'
+  match '/about',   to: 'static_pages#about'
+  match '/contact', to: 'static_pages#contact'
 
   # The priority is based upon order of creation:
   # first created -> highest priority.

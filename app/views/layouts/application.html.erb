@@ -12,7 +12,7 @@
   <%= render 'layouts/header' %>
   <div class="container">
     <!--Adding contents of flash variable to the site layout-->
-    <% flash.each do |dey, value| %>
+    <% flash.each do |key, value| %>
       <div class="alert alert-<%= key %>"><%= value %></div>
     <% end %>
     <%= yield %>
