@@ -8,9 +8,12 @@
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
 #  password_digest :string(255)
+#  remember_token  :string(255)
+#  admin           :boolean          default(FALSE)
 #
 
 class User < ActiveRecord::Base
+  # note we don't put admin as an attr_accessible due to put /users/17?admin=1
   attr_accessible :email, :name, :password, :password_confirmation
   has_secure_password
 
