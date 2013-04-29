@@ -5,15 +5,18 @@ class UsersController < ApplicationController
   before_filter :signed_in_user,  only: [:index, :edit, :update, :destroy]
   before_filter :correct_user,    only: [:edit, :update]
   before_filter :admin_user,      only: :destroy
+  before_filter :new_user,        only: [:new, :create]
 
   def show
     @user = User.find(params[:id])
   end
 
+  # called when going to /users url
   def new
     @user = User.new
   end
 
+  # called when click "create my account" button
   def create
     @user = User.new(params[:user])
     if @user.save
@@ -70,6 +73,15 @@ class UsersController < ApplicationController
     end
 
     def admin_user
-      redirect_to(root_path) unless current_user.admin?
+      if !current_user.admin? or current_user?(User.find(params[:id]))
+        redirect_to(root_path)
+      end
+    end
+
+    # only not-signed-in user can create new user
+    def new_user
+      if signed_in?
+        redirect_to(root_path)
+      end
     end
 end

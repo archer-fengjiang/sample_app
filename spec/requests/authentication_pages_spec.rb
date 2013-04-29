@@ -33,8 +33,6 @@ describe "Authentication" do
       it { should have_link('Sign out', href: signout_path) }
       
       it { should_not have_link('Sign in', href: signin_path) }
-
-
     end
   end
 
@@ -42,12 +40,25 @@ describe "Authentication" do
     describe "for non-signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
 
+      describe "Profile and Settings link doesn't appear on home/help/Sign in page" do
+        before { visit root_path }
+        it { should_not have_link('Profile', href: user_path(user)) }
+        it { should_not have_link('Settings', href: edit_user_path(user)) }
+
+        before { visit help_path }
+        it { should_not have_link('Profile', href: user_path(user)) }
+        it { should_not have_link('Settings', href: edit_user_path(user)) }
+
+        before { visit signin_path }
+        it { should_not have_link('Profile', href: user_path(user)) }
+        it { should_not have_link('Settings', href: edit_user_path(user)) }
+        it { should have_link('Sign up', href: signup_path) }
+      end
+
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
-          fill_in "Email",    with: user.email
-          fill_in "Password", with: user.password
-          click_button "Sign in"
+          valid_signin user
         end
 
         describe "after signing in" do
@@ -99,8 +110,22 @@ describe "Authentication" do
       before { sign_in non_admin }
 
       describe "submitting a DELETE request to the Users#destroy action" do
+        it "should not be able to delete another user" do
+          expect { delete user_path(user) }.to change(User, :count).by(0) 
+        end
+        
         before{ delete user_path(user) }
         specify { response.should redirect_to(root_path) }
+      end
+
+    end
+
+    describe "as admin user" do
+      let(:admin) { FactoryGirl.create(:admin) }
+      before{ sign_in admin }
+
+      it "should not be able to delete admin himself" do
+        expect { delete user_path(admin) }.to change(User, :count).by(0)
       end
     end
 
