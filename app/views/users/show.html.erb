@@ -8,4 +8,14 @@
       </h1>
     </section>
   </aside>
+  <div>
+    <% if @user.microposts.any? %>
+      <h3>Microposts(<%= @user.microposts.count %>)</h3>
+      <ol class="microposts"> <!--Ordered list-->
+        <!--define view/microposts/_microposts.html.erb-->
+        <%= render @microposts %> 
+      </ol>
+      <%= will_paginate @microposts %>
+    <% end %>
+  </div>
 </div>

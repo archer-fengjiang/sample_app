@@ -16,6 +16,7 @@ class User < ActiveRecord::Base
   # note we don't put admin as an attr_accessible due to put /users/17?admin=1
   attr_accessible :email, :name, :password, :password_confirmation
   has_secure_password
+  has_many :microposts, dependent: :destroy
 
   before_save{ |user| user.email = email.downcase }
   before_save :create_remember_token
