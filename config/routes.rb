@@ -6,7 +6,9 @@ SampleApp::Application.routes.draw do
   resources :users
 
   # Adding a resource to get the standard RESTFul actions for sessions
-  resources :sessions, only: [:new, :create, :destroy]
+  resources :sessions,    only: [:new, :create, :destroy]
+  # Same for microposts, POST => create action, DELETE => destroy action
+  resources :microposts,  only: [:create, :destroy]
 
   # maps requests for URI/static_pages/home to the home action
   # in the Staticpages controller

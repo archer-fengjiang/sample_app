@@ -4,22 +4,7 @@ describe "User pages" do
   subject { page }
 
   describe "index" do
-    # before do
-    #   sign_in FactoryGirl.create(:user) #defined in spec/support/utilities.rb
-    #   FactoryGirl.create(:user, name:"Bob", email: "bob@example.com")
-    #   FactoryGirl.create(:user, name:"Ben", email: "ben@exmaple.com")
-    #   visit users_path
-    # end
-
-    # it { should have_selector('title', text: 'All users') }
-    # it { should have_selector('h1', text: 'All users') }
-
-    # it "should list each user" do
-    #   User.all.each do |user|
-    #     page.should have_selector('li', text: user.name)
-    #   end
-    # end
-    let(:user) { FactoryGirl.create(:user) }
+    let(:user) { FactoryGirl.create(:user) }  
 
     before(:each) do
       sign_in user
@@ -65,7 +50,10 @@ describe "User pages" do
     let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Foo") }
     let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Bar") }
     #Code to make a user variable
-    before { visit user_path(user) }
+    before do
+      sign_in user
+      visit user_path(user) 
+    end
     it { should have_selector('h1',     text: user.name) }
     it { should have_selector('title',  text: user.name) }
 
