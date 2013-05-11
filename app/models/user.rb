@@ -17,6 +17,12 @@ class User < ActiveRecord::Base
   attr_accessible :email, :name, :password, :password_confirmation
   has_secure_password
   has_many :microposts, dependent: :destroy
+  has_many :relationships, foreign_key: "follower_id", dependent: :destroy
+  has_many :reverse_relationships,  foreign_key: "followed_id",
+                                    class_name: "Relationship", # otherwise rails would look for ReverseRelationship class
+                                    dependent: :destroy
+  has_many :followers, through: :reverse_relationships, source: :follower #we can omit source since rails will singularize "followers" and look for the foreign key follower_id in this case
+  has_many :followed_users, through: :relationships, source: :followed
 
   before_save{ |user| user.email = email.downcase }
   before_save :create_remember_token
@@ -33,6 +39,19 @@ class User < ActiveRecord::Base
     # This is preliminary. See "Following users" for the
     # full implementation.
     Micropost.where("user_id = ?", id)
+  end
+
+  # ! means this method will raise an exception, so will use create!
+  def follow!(other_user)
+    self.relationships.create!(followed_id: other_user.id)
+  end
+
+  def unfollow!(other_user)
+    self.relationships.find_by_followed_id(other_user.id).destroy
+  end
+
+  def following?(other_user)
+    self.relationships.find_by_followed_id(other_user.id)
   end
 
   private

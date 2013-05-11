@@ -3,12 +3,18 @@ SampleApp::Application.routes.draw do
 
   # endows sample application with all the actions needed for a RESTful User resource
   # correspondence of URIs, actions, and named routes is shown in Table 7.1
-  resources :users
+  resources :users do
+    member do
+      get :following, :followers
+    end
+  end
 
   # Adding a resource to get the standard RESTFul actions for sessions
   resources :sessions,    only: [:new, :create, :destroy]
   # Same for microposts, POST => create action, DELETE => destroy action
   resources :microposts,  only: [:create, :destroy]
+
+  resources :relationships, only: [:create, :destroy]
 
   # maps requests for URI/static_pages/home to the home action
   # in the Staticpages controller

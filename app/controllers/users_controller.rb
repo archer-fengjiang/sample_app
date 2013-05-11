@@ -2,7 +2,8 @@ class UsersController < ApplicationController
 
   # by default, before filters apply to every action in a controller
   # so we restrict the filter to act only on :edit and :update actions
-  before_filter :signed_in_user,  only: [:index, :edit, :update, :destroy, :show]
+  before_filter :signed_in_user,  
+                only: [:index, :edit, :update, :destroy, :show, :following, :followers]
   before_filter :correct_user,    only: [:edit, :update]
   before_filter :admin_user,      only: :destroy
   before_filter :new_user,        only: [:new, :create]
@@ -55,6 +56,20 @@ class UsersController < ApplicationController
     User.find(params[:id]).destroy
     flash[:success] = "User destroyed"
     redirect_to users_url
+  end
+
+  def following
+    @title = "Following"
+    @user = User.find(params[:id])
+    @users = @user.followed_users.paginate(page: params[:page])
+    render 'show_follow'
+  end
+
+  def followers
+    @title = "Followers"
+    @user = User.find(params[:id])
+    @users = @user.followers.paginate(page: params[:page])
+    render 'show_follow'
   end
 
   private
