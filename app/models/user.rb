@@ -38,7 +38,7 @@ class User < ActiveRecord::Base
   def feed
     # This is preliminary. See "Following users" for the
     # full implementation.
-    Micropost.where("user_id = ?", id)
+    Micropost.from_users_followed_by(self)
   end
 
   # ! means this method will raise an exception, so will use create!
