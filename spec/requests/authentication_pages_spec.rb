@@ -113,6 +113,19 @@ describe "Authentication" do
           specify { response.should redirect_to(signin_path) }
         end
       end
+
+      describe "in the Relationship controller" do
+        describe "submitting to the create action" do
+          before { post relationships_path }
+          specify { response.should redirect_to(signin_path) }
+        end
+      end
+
+      describe "submitting to the destroy action" do
+         # user should be redirected before application tries to retrieve the record
+        before { delete relationship_path(1) }
+        specify { response.should redirect_to(signin_path) }
+      end
     end
 
     describe "as wrong user" do
@@ -156,7 +169,5 @@ describe "Authentication" do
         expect { delete user_path(admin) }.to change(User, :count).by(0)
       end
     end
-
-    #note also we have a security hole that admin could delete himself
   end
 end
